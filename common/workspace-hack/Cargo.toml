@@ -25,7 +25,7 @@ crossbeam-deque = { version = "0.8.0", features = ["crossbeam-epoch", "crossbeam
 crossbeam-utils = { version = "0.8.3", features = ["default", "lazy_static", "std"] }
 either = { version = "1.6.1", features = ["default", "use_std"] }
 futures = { version = "0.3.12", features = ["alloc", "async-await", "default", "executor", "futures-executor", "std"] }
-futures-channel = { version = "0.3.13", features = ["alloc", "default", "futures-sink", "sink", "std"] }
+futures-channel = { version = "0.3.15", features = ["alloc", "default", "futures-sink", "sink", "std"] }
 futures-core = { version = "0.3.13", features = ["alloc", "default", "std"] }
 futures-io = { version = "0.3.13", features = ["default", "std"] }
 futures-sink = { version = "0.3.13", features = ["alloc", "default", "std"] }
@@ -79,7 +79,7 @@ crossbeam-deque = { version = "0.8.0", features = ["crossbeam-epoch", "crossbeam
 crossbeam-utils = { version = "0.8.3", features = ["default", "lazy_static", "std"] }
 either = { version = "1.6.1", features = ["default", "use_std"] }
 futures = { version = "0.3.12", features = ["alloc", "async-await", "default", "executor", "futures-executor", "std"] }
-futures-channel = { version = "0.3.13", features = ["alloc", "default", "futures-sink", "sink", "std"] }
+futures-channel = { version = "0.3.15", features = ["alloc", "default", "futures-sink", "sink", "std"] }
 futures-core = { version = "0.3.13", features = ["alloc", "default", "std"] }
 futures-io = { version = "0.3.13", features = ["default", "std"] }
 futures-sink = { version = "0.3.13", features = ["alloc", "default", "std"] }
@@ -136,7 +136,7 @@ crossbeam-deque = { version = "0.8.0", features = ["crossbeam-epoch", "crossbeam
 crossbeam-utils = { version = "0.8.3", features = ["default", "lazy_static", "std"] }
 either = { version = "1.6.1", features = ["default", "use_std"] }
 futures = { version = "0.3.12", features = ["alloc", "async-await", "default", "executor", "futures-executor", "std"] }
-futures-channel = { version = "0.3.13", features = ["alloc", "default", "futures-sink", "sink", "std"] }
+futures-channel = { version = "0.3.15", features = ["alloc", "default", "futures-sink", "sink", "std"] }
 futures-core = { version = "0.3.13", features = ["alloc", "default", "std"] }
 futures-io = { version = "0.3.13", features = ["default", "std"] }
 futures-sink = { version = "0.3.13", features = ["alloc", "default", "std"] }
@@ -190,7 +190,7 @@ crossbeam-deque = { version = "0.8.0", features = ["crossbeam-epoch", "crossbeam
 crossbeam-utils = { version = "0.8.3", features = ["default", "lazy_static", "std"] }
 either = { version = "1.6.1", features = ["default", "use_std"] }
 futures = { version = "0.3.12", features = ["alloc", "async-await", "default", "executor", "futures-executor", "std"] }
-futures-channel = { version = "0.3.13", features = ["alloc", "default", "futures-sink", "sink", "std"] }
+futures-channel = { version = "0.3.15", features = ["alloc", "default", "futures-sink", "sink", "std"] }
 futures-core = { version = "0.3.13", features = ["alloc", "default", "std"] }
 futures-io = { version = "0.3.13", features = ["default", "std"] }
 futures-sink = { version = "0.3.13", features = ["alloc", "default", "std"] }
