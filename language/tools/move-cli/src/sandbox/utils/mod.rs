@@ -83,13 +83,73 @@ pub(crate) fn explain_publish_changeset(changeset: &ChangeSet, state: &OnDiskSta
     )
 }
 
-// Print a struct with a specified outer indent
-fn print_struct_with_indent(value: &AnnotatedMoveStruct, indent: u64) {
+// Print diff of struct with a specified outer indent,
+// optionally fold unchanged lines
+// fn print_struct_diff_with_indentA(
+//     value1: Option<&AnnotatedMoveStruct>,
+//     value2: Option<&AnnotatedMoveStruct>,
+//     indent: u64,
+//     fold: bool,
+// ) {
+//     let indent_str: String = (0..indent).map(|_| " ").collect::<String>();
+//     let s1 = value1.as_ref().map_or(String::new(), |x| x.to_string());
+//     let s2 = value2.as_ref().map_or(String::new(), |x| x.to_string());
+//     let lines1 = s1.split('\n').filter(|&x| !x.is_empty()).collect::<Vec<&str>>();
+//     let lines2 = s2.split('\n').filter(|&x| !x.is_empty()).collect::<Vec<&str>>();
+//     let max_len = std::cmp::max(lines1.len(), lines2.len());
+//     let mut folded = false;
+//     for i in 0..max_len {
+//         if i < lines1.len() && i < lines2.len() {
+//             if lines1[i] == lines2[i] {
+//                 if fold {
+//                     if !folded {
+//                         println!("{}...", indent_str);
+//                         folded = true;
+//                     }
+//                 } else {
+//                     println!("={}{}", indent_str, lines1[i]);
+//                 }
+//             } else {
+//                 println!("-{}{}", indent_str, lines1[i]);
+//                 println!("+{}{}", indent_str, lines2[i]);
+//                 folded = false;
+//             }
+//         } else if i < lines1.len() {
+//             println!("-{}{}", indent_str, lines1[i]);
+//         } else if i < lines2.len() {
+//             println!("+{}{}", indent_str, lines2[i]);
+//         }
+//     }
+// }
+// Print diff of struct with a specified outer indent
+fn print_struct_diff_with_indent(
+    struct_old: Option<&AnnotatedMoveStruct>,
+    struct_new: Option<&AnnotatedMoveStruct>,
+    indent: u64,
+) {
+    use difference::*;
     let indent_str: String = (0..indent).map(|_| " ").collect::<String>();
-    let value_str = format!("{}", value);
-    let lines = value_str.split('\n');
-    for line in lines {
-        println!("{}{}", indent_str, line)
+    let s1 = struct_old.as_ref().map_or(String::new(), |x| x.to_string());
+    let s2 = struct_new.as_ref().map_or(String::new(), |x| x.to_string());
+    let changeset = Changeset::new(&s1, &s2, "\n");
+    for seq in changeset.diffs.into_iter() {
+        match &seq {
+            Difference::Same(x) => {
+                for line in x.split('\n') {
+                    println!("={}{}", indent_str, line);
+                }
+            }
+            Difference::Add(x) => {
+                for line in x.split('\n') {
+                    println!("+{}{}", indent_str, line);
+                }
+            }
+            Difference::Rem(x) => {
+                for line in x.split('\n') {
+                    println!("-{}{}", indent_str, line);
+                }
+            }
+        }
     }
 }
 
@@ -148,12 +208,9 @@ pub(crate) fn explain_execution_effects(
                             .unwrap();
                         let resource_old = MoveValueAnnotator::new_no_stdlib(state)
                             .view_resource(&struct_tag, &resource_data)?;
-                        println!("      Previous:");
-                        print_struct_with_indent(&resource_old, 8);
                         let resource_new = MoveValueAnnotator::new_no_stdlib(state)
                             .view_resource(&struct_tag, &blob)?;
-                        println!("      New:");
-                        print_struct_with_indent(&resource_new, 8)
+                        print_struct_diff_with_indent(Some(&resource_old), Some(&resource_new), 6)
                     } else {
                         println!(
                             "Added type {}: {:?} (wrote {:?} bytes)",
@@ -162,7 +219,7 @@ pub(crate) fn explain_execution_effects(
                         // Print new resource
                         let resource = MoveValueAnnotator::new_no_stdlib(state)
                             .view_resource(&struct_tag, &blob)?;
-                        print_struct_with_indent(&resource, 6)
+                        print_struct_diff_with_indent(None, Some(&resource), 6)
                     }
                 }
                 None => {
@@ -176,7 +233,7 @@ pub(crate) fn explain_execution_effects(
                         .unwrap();
                     let resource_old = MoveValueAnnotator::new_no_stdlib(state)
                         .view_resource(&struct_tag, &resource_data)?;
-                    print_struct_with_indent(&resource_old, 6);
+                    print_struct_diff_with_indent(Some(&resource_old), None, 6)
                 }
             };
             total_bytes_written += bytes_to_write;
